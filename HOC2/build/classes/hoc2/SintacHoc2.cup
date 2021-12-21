@@ -1,0 +1,58 @@
+/* Calculadora Hoc2 */
+package hoc2;
+import java_cup.runtime.*;
+import java.io.FileReader;
+class AnalizadorSintactico;
+
+parser code {:
+    public void report_error(String mensaje, Object info){
+        StringBuilder m = new StringBuilder("Error");
+        if(info instanceof java_cup.runtime.Symbol){
+            java_cup.runtime.Symbol s = (java_cup.runtime.Symbol) info;
+            if(s.left >= 0){
+                m.append(" en la linea " + (s.left + 1));
+                if(s.right >= 0)
+                    m.append(", columna " + (s.right + 1));
+            }
+        }
+        m.append("  : " + mensaje);
+        System.err.println(m);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:}
+
+terminal OpSuma, OpResta, OpProd, OpDiv, OpAsig;
+terminal ParIzq, ParDer, Enter;
+terminal NUM;
+terminal VAR;
+terminal UMINUS;
+
+non terminal list;
+non terminal asgn, expr;
+
+/*Precedences*/
+precedence left OpSuma, OpResta;
+precedence left OpProd, OpDiv;
+precedence left UMINUS;
+
+list    ::=
+        |   Enter
+        |   list expr Enter
+        ;
+asgn    ::= VAR OpAsig expr
+        ;
+expr    ::= NUM
+        |   VAR
+        |   asgn
+        |   expr OpSuma expr
+        |   expr OpResta expr
+        |   expr OpProd expr
+        |   expr OpDiv expr
+        |   ParIzq expr ParDer
+        |   OpResta expr %prec UMINUS
+        ;
+        
