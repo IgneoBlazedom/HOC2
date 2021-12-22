@@ -175,7 +175,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             break;
                         case AnalizadorSintacticoSym.error:
                             CadAux = "Token: " + CadAux + "\tIdentTOKEN: ERROR\t Lexema: " + Lexema + "\n";
-                            break;    
+                            break;
+                        case AnalizadorSintacticoSym.OpAsig:
+                            CadAux = "Token: " + CadAux + "\tIdentTOKEN: OpAsig\t Lexema: " + Lexema + "\n";
+                            break;  
                         case AnalizadorSintacticoSym.VAR:
                             CadAux = "Token: " + CadAux + "\tIdentTOKEN: VAR\t Lexema: " + Lexema + " indice = " + Integer.toString((Integer)simb.value) + "\n";
                             break;
@@ -192,7 +195,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnSintacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSintacActionPerformed
         // TODO add your handling code here:
         try {
-            AnalizadorSintactico Sintac = new AnalizadorSintactico(new AnalizadorLexico(new FileReader("ArchEntrada.txt")));
+            AnalizadorSintactico Sintac = new AnalizadorSintactico(
+                    new AnalizadorLexico(new FileReader("ArchEntrada.txt")));
+            Sintac.frmInterfaz = this;
+            
             Object result = Sintac.parse().value;
             jAreaSintac.setText("\n Fin del análisis sintáctico");
         } catch (Exception e) {
@@ -204,35 +210,41 @@ public class FrmPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPrincipal().setVisible(true);
-            }
-        });
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new FrmPrincipal().setVisible(true);
+//            }
+//        });
+        FrmPrincipal frmInterfaz = new FrmPrincipal();
+        frmInterfaz.setVisible(true);
+    }
+    
+    public void PonerTextSintac(String texto){
+        jAreaSintac.append(texto);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

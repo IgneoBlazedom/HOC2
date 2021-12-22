@@ -5,6 +5,9 @@ import java.io.FileReader;
 class AnalizadorSintactico;
 
 parser code {:
+    FrmPrincipal frmInterfaz;
+    Float variables[] = new Float[26];
+
     public void report_error(String mensaje, Object info){
         StringBuilder m = new StringBuilder("Error");
         if(info instanceof java_cup.runtime.Symbol){
@@ -27,32 +30,33 @@ parser code {:
 
 terminal OpSuma, OpResta, OpProd, OpDiv, OpAsig;
 terminal ParIzq, ParDer, Enter;
-terminal NUM;
-terminal VAR;
+terminal Float NUM;
+terminal Integer VAR;
 terminal UMINUS;
 
 non terminal list;
-non terminal asgn, expr;
+non terminal Float asgn, expr;
 
 /*Precedences*/
+precedence right OpAsig;
 precedence left OpSuma, OpResta;
 precedence left OpProd, OpDiv;
 precedence left UMINUS;
 
 list    ::=
         |   Enter
-        |   list expr Enter
+        |   list expr:e Enter {: frmInterfaz.PonerTextSintac(Float.toString(e) + "\n");:}
         ;
-asgn    ::= VAR OpAsig expr
+asgn    ::= VAR:indVar OpAsig expr:valExpr {: RESULT = variables[indVar] = valExpr; :}
         ;
-expr    ::= NUM
-        |   VAR
-        |   asgn
-        |   expr OpSuma expr
-        |   expr OpResta expr
-        |   expr OpProd expr
-        |   expr OpDiv expr
-        |   ParIzq expr ParDer
-        |   OpResta expr %prec UMINUS
+expr    ::= NUM:valNum {: RESULT = valNum; :}
+        |   VAR:indVar {: RESULT = variables[indVar]; :}
+        |   asgn:valAsgn {: RESULT = valAsgn; :}
+        |   expr:e1 OpSuma expr:e2 {: RESULT = e1 + e2; :}
+        |   expr:e1 OpResta expr:e2 {: RESULT = e1 - e2; :}
+        |   expr:e1 OpProd expr:e2 {: RESULT = e1 * e2; :}
+        |   expr:e1 OpDiv expr:e2 {: RESULT = e1 / e2; :}
+        |   ParIzq expr:e ParDer {: RESULT = e; :}
+        |   OpResta expr:e {: RESULT = -e; :} %prec UMINUS
         ;
         
