@@ -200,7 +200,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Sintac.frmInterfaz = this;
             
             Object result = Sintac.parse().value;
-            jAreaSintac.setText("\n Fin del análisis sintáctico");
+            jAreaSintac.append("\n Fin del análisis sintáctico");
         } catch (Exception e) {
             e.printStackTrace();
         }
